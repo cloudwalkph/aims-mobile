@@ -24,6 +24,10 @@ import com.github.bassaer.chatmessageview.models.User;
 import com.github.bassaer.chatmessageview.utils.ChatBot;
 import com.github.bassaer.chatmessageview.views.ChatView;
 import com.google.gson.Gson;
+import com.pusher.client.Pusher;
+import com.pusher.client.PusherOptions;
+import com.pusher.client.channel.Channel;
+import com.pusher.client.channel.SubscriptionEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,10 +36,6 @@ import java.net.URISyntaxException;
 import java.util.Random;
 
 import javax.inject.Inject;
-
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,7 +49,6 @@ public class JobOrderDiscussionsFragment extends Fragment {
     public String TAG = "JOBORDERDISCUSSION";
 
     private ChatView mChatView;
-    private Socket socket;
 
     public JobOrderDiscussionsFragment() {
         // Required empty public constructor
@@ -156,70 +155,44 @@ public class JobOrderDiscussionsFragment extends Fragment {
     }
 
     private void connectToSocketServer() {
-        try {
-            final JSONObject object = new JSONObject();
-            JSONObject auth = new JSONObject();
-            JSONObject headers = new JSONObject();
+        String channel = "jo.1";
 
-            String channel = "jo.1";
-            object.put("channel", channel);
-            headers.put("Authorization", "Bearer U01W8xxbBTtSN6FytDUk9gO8DSEwZnpVGbmGZFzwqyhsuqESEF61eWiPO8IP");
-            auth.put("headers", headers);
-            object.put("auth", auth);
+        PusherOptions options = new PusherOptions();
+        options.setCluster("ap1");
+        Pusher pusher = new Pusher("dbbbc3a5c9b47ac1b3bd", options);
+        Channel pChannel = pusher.subscribe(channel);
 
-            socket = IO.socket("http://192.168.254.101:6001");
-            socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    Log.i(TAG, "Connected to socket server");
-                    socket.emit("subscribe", object);
-                }
-            }).on("new.message", new Emitter.Listener() {
-                @Override
-                public void call(Object... args) {
-                    JSONObject json = (JSONObject) args[1];
-                    Discussion discussion = null;
+        pChannel.bind("new.message", new SubscriptionEventListener() {
+            @Override
+            public void onEvent(String channelName, String eventName, final String data) {
+                System.out.println(data);
+                newMessage(data);
+            }
+        });
 
-                    try {
-                        discussion = gson.fromJson(json.getString("discussion"), Discussion.class);
+        pusher.connect();
+    }
 
-                        //Receive message
-                        Bitmap yourIcon = getOptimizedBitmap(R.drawable.face_1);
-                        com.cloudwalkdigital.aims.data.model.User user = discussion.getUser();
-                        User sender = new User(user.getId(), user.getProfile().getName(), yourIcon);
-                        final Message receivedMessage = new Message.Builder()
-                                .setUser(sender)
-                                .setRightMessage(false)
-                                .setMessageText(discussion.getMessage())
-                                .build();
+    private void newMessage(String json) {
+        Discussion discussion = gson.fromJson(json, Discussion.class);
 
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                playNotification();
-                                mChatView.receive(receivedMessage);
-                            }
-                        });
+        //Receive message
+        Bitmap yourIcon = getOptimizedBitmap(R.drawable.face_1);
+        com.cloudwalkdigital.aims.data.model.User user = discussion.getUser();
+        User sender = new User(user.getId(), user.getProfile().getName(), yourIcon);
+        final Message receivedMessage = new Message.Builder()
+                .setUser(sender)
+                .setRightMessage(false)
+                .setMessageText(discussion.getMessage())
+                .build();
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    Log.i(TAG, discussion.getMessage());
-                }
-            });
-
-            socket.connect();
-        } catch (URISyntaxException e) {
-            Log.i(TAG, "Failed to connect to socket server");
-            Log.i(TAG, e.getMessage());
-            e.printStackTrace();
-        } catch (JSONException e) {
-            Log.i(TAG, "Failed to connect to socket server");
-            Log.i(TAG, e.getMessage());
-            e.printStackTrace();
-        }
-
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                playNotification();
+                mChatView.receive(receivedMessage);
+            }
+        });
     }
 
     private static int calculateInSampleSize(BitmapFactory.Options options,

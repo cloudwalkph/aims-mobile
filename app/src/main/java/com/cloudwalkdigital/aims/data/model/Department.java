@@ -17,4 +17,8 @@ public class Department {
         this.name = name;
         this.slug = slug;
     }
+
+    public String getName() {
+        return name;
+    }
 }
