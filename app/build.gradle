@@ -35,36 +35,36 @@ dependencies {
     })
 
     // Stetho
-    debugCompile 'com.facebook.stetho:stetho:1.5.0'
-    debugCompile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
-    debugCompile 'com.uphyca:stetho_realm:2.0.0'
     // TestFairy
-    debugCompile 'testfairy:testfairy-android-sdk:1.5.1@aar'
     // Butterknife
-    compile 'com.jakewharton:butterknife:8.6.0'
     // Guava
-    compile 'com.google.guava:guava:22.0-android'
     // Dagger
-    compile 'com.google.dagger:dagger:2.9'
     // RXJava
     // Networking
     // PermissionDispatcher
     // Support
     compile 'com.jakewharton:butterknife:8.6.0'
+    // Networking
+    // PermissionDispatcher
+    // Support
+    compile 'com.jakewharton:butterknife:8.6.0'
+    compile 'com.google.guava:guava:22.0-android'
+    compile 'com.google.dagger:dagger:2.9'
+    debugCompile 'com.facebook.stetho:stetho:1.5.0'
+    debugCompile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+    debugCompile 'com.uphyca:stetho_realm:2.0.0'
+    debugCompile 'testfairy:testfairy-android-sdk:1.5.1@aar'
     compile 'com.jakewharton:butterknife:8.6.0'
     compile 'com.google.guava:guava:22.0-android'
     compile 'com.google.dagger:dagger:2.9'
     compile 'io.reactivex:rxandroid:1.2.0'
     compile 'io.reactivex:rxjava:1.1.4'
-    // Networking
     compile 'com.google.code.gson:gson:2.8.1'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
-    // PermissionDispatcher
     compile 'com.github.hotchemi:permissionsdispatcher:2.0.7'
-    // Support
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:25.3.1'

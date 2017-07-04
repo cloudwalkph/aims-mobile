@@ -11,14 +11,22 @@ import android.os.Bundle;
 
 import com.cloudwalkdigital.aims.R;
 
-import layout.JobOrderFragment;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JobOrderActivity extends AppCompatActivity {
+
+    public List<Fragment> fragments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_order);
+
+        fragments = new ArrayList<Fragment>();
+        fragments.add(JobOrderFragment.newInstance());
+        fragments.add(JobOrderDiscussionsFragment.newInstance());
+        fragments.add(JobOrderValidateFragment.newInstance());
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -31,7 +39,6 @@ public class JobOrderActivity extends AppCompatActivity {
     }
 
     public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
-        final int PAGE_COUNT = 3;
         private String tabTitles[] = new String[] { "Details", "Discussions", "Validate" };
         private Context context;
 
@@ -42,12 +49,12 @@ public class JobOrderActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return fragments.size();
         }
 
         @Override
         public Fragment getItem(int position) {
-            return JobOrderFragment.newInstance(position + 1);
+            return fragments.get(position);
         }
 
         @Override

@@ -1,4 +1,4 @@
-package layout;
+package com.cloudwalkdigital.aims.joborder;
 
 
 import android.os.Bundle;
@@ -21,9 +21,9 @@ public class JobOrderFragment extends Fragment {
 
     private int mPage;
 
-    public static JobOrderFragment newInstance(int page) {
+    public static JobOrderFragment newInstance() {
         Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
+//        args.putInt(ARG_PAGE, page);
         JobOrderFragment fragment = new JobOrderFragment();
         fragment.setArguments(args);
         return fragment;
