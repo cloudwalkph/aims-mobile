@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 
-import com.cloudwalkdigital.aims.projectselection.ProjectSelectionActivity;
+//import com.cloudwalkdigital.aims.projectselection.ProjectSelectionActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,9 +23,9 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick(R.id.btn_log_in)
-    public void doLogin(Button button) {
-        Intent intent = new Intent(LoginActivity.this, ProjectSelectionActivity.class);
-        startActivity(intent);
-    }
+//    @OnClick(R.id.btn_log_in)
+//    public void doLogin(Button button) {
+//        Intent intent = new Intent(LoginActivity.this, ProjectSelectionActivity.class);
+//        startActivity(intent);
+//    }
 }
