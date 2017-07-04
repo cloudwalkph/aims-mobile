@@ -38,24 +38,24 @@ public class UserSelectionActivity extends AppCompatActivity {
 
         setupToolbar();
 
-        mRecyclerViewUsers.setHasFixedSize(true);
-
-        users = new ArrayList<User>();
-        users.add(new User("Jane", "Doe", "Inventory")); //test data
-        users.add(new User("John", "Doe", "Creatives")); //test data
-
-        // Create adapter passing in the sample user data
-        UserSelectionActivity.UserAdapter adapter = new UserSelectionActivity.UserAdapter(UserSelectionActivity.this, users);
-        // Attach the adapter to the recyclerview to populate items
-        mRecyclerViewUsers.setAdapter(adapter);
-        // Set layout manager to position the items
-        LinearLayoutManager layoutManager = new LinearLayoutManager(UserSelectionActivity.this);
-        mRecyclerViewUsers.setLayoutManager(layoutManager);
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerViewUsers.getContext(),
-                layoutManager.getOrientation());
-
-        mRecyclerViewUsers.addItemDecoration(dividerItemDecoration);
+//        mRecyclerViewUsers.setHasFixedSize(true);
+//
+//        users = new ArrayList<User>();
+//        users.add(new User("Jane", "Doe", "Inventory")); //test data
+//        users.add(new User("John", "Doe", "Creatives")); //test data
+//
+//        // Create adapter passing in the sample user data
+//        UserSelectionActivity.UserAdapter adapter = new UserSelectionActivity.UserAdapter(UserSelectionActivity.this, users);
+//        // Attach the adapter to the recyclerview to populate items
+//        mRecyclerViewUsers.setAdapter(adapter);
+//        // Set layout manager to position the items
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(UserSelectionActivity.this);
+//        mRecyclerViewUsers.setLayoutManager(layoutManager);
+//
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerViewUsers.getContext(),
+//                layoutManager.getOrientation());
+//
+//        mRecyclerViewUsers.addItemDecoration(dividerItemDecoration);
     }
 
     private void setupToolbar() {
@@ -106,10 +106,10 @@ public class UserSelectionActivity extends AppCompatActivity {
 
             // Set item views based on your views and data model
             TextView textView = holder.nameTextView;
-            textView.setText(user.getFirstName()+" "+ user.getLastName());
+            textView.setText(user.getProfile().getName());
 
             TextView department = holder.departmentTextView;
-            department.setText(user.getDepartment());
+            department.setText(user.getDepartment().getName());
         }
 
         @Override
@@ -144,7 +144,7 @@ public class UserSelectionActivity extends AppCompatActivity {
                     User user = mUser.get(position);
 
                     // We can access the data within the views
-                    Toast.makeText(getContext(), user.getDepartment(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), user.getDepartment(), Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(UserSelectionActivity.this, QuestionActivity.class);
                     startActivity(intent);
