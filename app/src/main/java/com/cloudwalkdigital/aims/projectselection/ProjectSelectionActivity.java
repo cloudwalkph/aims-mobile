@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.cloudwalkdigital.aims.R;
 import com.cloudwalkdigital.aims.data.model.JobOrder;
+import com.cloudwalkdigital.aims.joborder.JobOrderActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -199,6 +200,8 @@ public class ProjectSelectionActivity extends AppCompatActivity {
 
                     // We can access the data within the views
                     Toast.makeText(getContext(), project.getProjectName(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ProjectSelectionActivity.this, JobOrderActivity.class);
+                    startActivity(intent);
                 }
             }
         }
