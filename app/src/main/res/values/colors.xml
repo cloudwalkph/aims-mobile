@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#ff7043</color>
+    <color name="colorPrimaryDark">#ff6e40</color>
+    <color name="colorAccent">#F57E20 </color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="accounting">#673ab7</color>
+    <color name="cmtuva">#f57c00</color>
+    <color name="ae">#f44336</color>
+    <color name="projectManager">#fdd835</color>
+    <color name="setup">#43a047</color>
+    <color name="creatives">#3f51b5</color>
+    <color name="activations">#42a5f5</color>
+    <color name="hr">#29b6f6</color>
+    <color name="inventory">#673ab7</color>
+
+    <color name="rb_color1">#2a92db</color>
+    <color name="rb_color2">#757575</color>
+
+    <!-- Material Colors -->
+    <color name="red_400">#ef5350</color>
+    <color name="orange_600">#fb8c00</color>
+    <color name="grey_300">#e0e0e0</color>
+    <color name="grey_400">#c7c7c7</color>
 </resources>

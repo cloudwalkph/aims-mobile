@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">AIMS</string>
+    <string name="prompt_email">E-Mail Address</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+
+    <string name="menu_events">Events</string>
+    <string name="menu_logout">Logout</string>
+
+    <string name="navigation_view_header_title">VALIDATE</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
