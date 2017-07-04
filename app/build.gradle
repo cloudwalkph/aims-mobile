@@ -43,10 +43,10 @@ dependencies {
     // Networking
     // PermissionDispatcher
     // Support
-    compile 'com.jakewharton:butterknife:8.6.0'
     // Networking
     // PermissionDispatcher
     // Support
+    compile 'com.jakewharton:butterknife:8.6.0'
     compile 'com.jakewharton:butterknife:8.6.0'
     compile 'com.google.guava:guava:22.0-android'
     compile 'com.google.dagger:dagger:2.9'

@@ -22,8 +22,11 @@
         <activity
             android:name=".projectselection.ProjectSelectionActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".joborder.JobOrderActivity" android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".intro.IntroActivity"></activity>
+        <activity
+            android:name=".joborder.JobOrderActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".intro.IntroActivity" />
+        <activity android:name=".userselection.UserSelectionActivity"></activity>
     </application>
 
 </manifest>
