@@ -49,6 +49,7 @@ public class JobOrderActivity extends AppCompatActivity {
 
         ActionBar ab = getSupportActionBar();
         ab.setTitle("Project 1");
+        ab.setSubtitle("AGASDA55");
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
