@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "673177535306",
+    "firebase_url": "https://aims-mobile-58fa1.firebaseio.com",
+    "project_id": "aims-mobile-58fa1",
+    "storage_bucket": "aims-mobile-58fa1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:673177535306:android:494512de26954c3a",
+        "android_client_info": {
+          "package_name": "com.cloudwalkdigital.aims"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "673177535306-s7uk8f433a006fkr25jctc55iuotsr0b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cloudwalkdigital.aims",
+            "certificate_hash": "27ed785c13ef115cc751552a7a2e6bdc4ce2ef28"
+          }
+        },
+        {
+          "client_id": "673177535306-1uo2n88355qua49cp32naf8dbniecllr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsDY9-r2vZrfhVZVszw4-OM62mFgguv3U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "673177535306-1uo2n88355qua49cp32naf8dbniecllr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
