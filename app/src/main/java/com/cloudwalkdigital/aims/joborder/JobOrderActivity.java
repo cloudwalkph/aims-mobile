@@ -6,8 +6,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 import com.cloudwalkdigital.aims.R;
 
@@ -23,6 +25,8 @@ public class JobOrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_order);
 
+        setupToolbar();
+
         fragments = new ArrayList<Fragment>();
         fragments.add(JobOrderFragment.newInstance());
         fragments.add(JobOrderDiscussionsFragment.newInstance());
@@ -36,6 +40,16 @@ public class JobOrderActivity extends AppCompatActivity {
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle("Project 1");
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {

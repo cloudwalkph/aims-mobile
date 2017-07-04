@@ -22,6 +22,7 @@
     <!-- Material Colors -->
     <color name="red_400">#ef5350</color>
     <color name="orange_600">#fb8c00</color>
+    <color name="grey">#eeeeee</color>
     <color name="grey_300">#e0e0e0</color>
     <color name="grey_400">#c7c7c7</color>
 </resources>
