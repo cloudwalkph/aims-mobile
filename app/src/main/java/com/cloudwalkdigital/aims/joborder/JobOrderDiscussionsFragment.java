@@ -51,16 +51,6 @@ public class JobOrderDiscussionsFragment extends Fragment {
     private ChatView mChatView;
     private Socket socket;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-
     public JobOrderDiscussionsFragment() {
         // Required empty public constructor
     }
@@ -71,7 +61,6 @@ public class JobOrderDiscussionsFragment extends Fragment {
      *
      * @return A new instance of fragment JobOrderDiscussionsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static JobOrderDiscussionsFragment newInstance() {
         JobOrderDiscussionsFragment fragment = new JobOrderDiscussionsFragment();
         Bundle args = new Bundle();
@@ -103,12 +92,12 @@ public class JobOrderDiscussionsFragment extends Fragment {
         //User name
         String myName = "Michael";
 
-        int yourId = 1;
-        Bitmap yourIcon = BitmapFactory.decodeResource(getResources(), R.drawable.face_1);
-        String yourName = "Emily";
+//        int yourId = 1;
+//        Bitmap yourIcon = BitmapFactory.decodeResource(getResources(), R.drawable.face_1);
+//        String yourName = "Emily";
 
         final User me = new User(myId, myName, myIcon);
-        final User you = new User(yourId, yourName, yourIcon);
+//        final User you = new User(yourId, yourName, yourIcon);
 
         mChatView = (ChatView) view.findViewById(R.id.chat_view);
 
