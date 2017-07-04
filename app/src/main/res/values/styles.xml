@@ -36,8 +36,8 @@
     </style>
 
     <style name="PrimaryButton" parent="CustomButtons">
-        <item name="colorControlHighlight">@color/colorAccent</item>
-        <item name="colorButtonNormal">@color/orange_600</item>
+        <item name="colorControlHighlight">@color/colorPrimary</item>
+        <item name="colorButtonNormal">@color/colorAccent</item>
     </style>
 
     <style name="DangerButton" parent="CustomButtons">
