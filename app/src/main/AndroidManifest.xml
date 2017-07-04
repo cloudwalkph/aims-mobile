@@ -11,10 +11,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,13 +21,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".projectselection.ProjectSelectionActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".projectselection.ProjectSelectionActivity" />
         <activity
-            android:name=".joborder.JobOrderActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".joborder.JobOrderActivity" />
         <activity android:name=".intro.IntroActivity" />
-        <activity android:name=".userselection.UserSelectionActivity"></activity>
+        <activity android:name=".userselection.UserSelectionActivity" />
+        <activity android:name=".questions.QuestionActivity"></activity>
     </application>
 
 </manifest>

@@ -34,6 +34,18 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    // Stetho
+    // TestFairy
+    // Butterknife
+    // Guava
+    // Dagger
+    // RXJava
+    // Networking
+    // PermissionDispatcher
+    // Support
+    // Networking
+    // PermissionDispatcher
+    // Support
     compile 'com.jakewharton:butterknife:8.6.0'
     compile 'com.jakewharton:butterknife:8.6.0'
     compile 'com.google.guava:guava:22.0-android'
