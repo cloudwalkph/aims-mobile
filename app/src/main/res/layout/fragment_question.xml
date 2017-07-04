@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.cloudwalkdigital.validateapp.questions.QuestionFragment">
+    tools:context="com.cloudwalkdigital.aims.questions.QuestionFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -14,7 +14,7 @@
         android:layout_centerVertical="true"
         android:text="Question #1"
         android:textAlignment="center"
-        android:textSize="26dp"
+        android:textSize="14dp"
         android:textStyle="bold" />
 
     <TextView
@@ -25,7 +25,7 @@
         android:layout_centerVertical="true"
         android:text="TextView"
         android:textAlignment="center"
-        android:textSize="26dp"
+        android:textSize="12dp"
         android:textStyle="bold" />
 
 

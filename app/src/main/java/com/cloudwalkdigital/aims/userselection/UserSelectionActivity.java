@@ -2,11 +2,13 @@ package com.cloudwalkdigital.aims.userselection;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,8 @@ public class UserSelectionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_selection);
         ButterKnife.bind(this);
 
+        setupToolbar();
+
         mRecyclerViewUsers.setHasFixedSize(true);
 
         users = new ArrayList<User>();
@@ -52,6 +56,15 @@ public class UserSelectionActivity extends AppCompatActivity {
                 layoutManager.getOrientation());
 
         mRecyclerViewUsers.addItemDecoration(dividerItemDecoration);
+    }
+
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle("Select User");
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     /**
