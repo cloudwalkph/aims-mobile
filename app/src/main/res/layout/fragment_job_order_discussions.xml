@@ -1,13 +1,11 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.cloudwalkdigital.aims.joborder.JobOrderDiscussionsFragment">
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.github.bassaer.chatmessageview.views.ChatView
+        android:id="@+id/chat_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Discussions Fragment" />
+        android:layout_height="match_parent"/>
 
-</FrameLayout>
+</LinearLayout>

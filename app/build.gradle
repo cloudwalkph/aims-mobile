@@ -80,4 +80,6 @@ dependencies {
     debugCompile 'com.uphyca:stetho_realm:2.0.0'
     debugCompile 'testfairy:testfairy-android-sdk:1.5.1@aar'
     provided 'javax.annotation:jsr250-api:1.0'
+
+    compile 'com.github.bassaer:chatmessageview:1.3.3'
 }
