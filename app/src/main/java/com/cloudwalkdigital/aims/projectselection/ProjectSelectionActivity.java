@@ -2,6 +2,8 @@ package com.cloudwalkdigital.aims.projectselection;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,6 +14,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,42 +22,61 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cloudwalkdigital.aims.App;
 import com.cloudwalkdigital.aims.R;
+import com.cloudwalkdigital.aims.data.APIService;
 import com.cloudwalkdigital.aims.data.model.JobOrder;
+import com.cloudwalkdigital.aims.data.model.User;
 import com.cloudwalkdigital.aims.joborder.JobOrderActivity;
+import com.cloudwalkdigital.aims.utils.SessionManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class ProjectSelectionActivity extends AppCompatActivity {
+    @Inject Retrofit retrofit;
+    @Inject SharedPreferences sharedPreferences;
+    @Inject SessionManager sessionManager;
 
     @BindView(R.id.rvProjects) RecyclerView mRecyclerViewEvents;
-    private List<JobOrder> projects;
 
+    private List<JobOrder> projects;
     private DrawerLayout mDrawerLayout;
+    public ProjectAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_selection);
 
+        // Bindings
+        ((App) getApplication()).getNetComponent().inject(this);
         ButterKnife.bind(this);
 
         setupToolbar();
         setupDrawer();
 
+        GetJobOrdersTask getJobOrdersTask = new GetJobOrdersTask();
+        getJobOrdersTask.execute();
+
         mRecyclerViewEvents.setHasFixedSize(true);
 
         projects = new ArrayList<JobOrder>();
-        for (int i = 1; i <= 5; ++i) {
-            projects.add(new JobOrder("Project "+i, "June 0"+ i, "58BD0B7D68C5"+ i)); //test data
-        }
+//        for (int i = 1; i <= 5; ++i) {
+//            projects.add(new JobOrder("Project "+i, "June 0"+ i, "58BD0B7D68C5"+ i)); //test data
+//        }
 
         // Create adapter passing in the sample user data
-        ProjectAdapter adapter = new ProjectAdapter(ProjectSelectionActivity.this, projects);
+        adapter = new ProjectAdapter(ProjectSelectionActivity.this, projects);
         // Attach the adapter to the recyclerview to populate items
         mRecyclerViewEvents.setAdapter(adapter);
         // Set layout manager to position the items
@@ -65,6 +87,28 @@ public class ProjectSelectionActivity extends AppCompatActivity {
                 layoutManager.getOrientation());
 
         mRecyclerViewEvents.addItemDecoration(dividerItemDecoration);
+    }
+
+    private List<JobOrder> getJobOrders() {
+        APIService service = retrofit.create(APIService.class);
+        User user = sessionManager.getUserInformation();
+
+        Call<List<JobOrder>> call = service.getJobOrders(user.getApiToken());
+
+        try {
+            Response<List<JobOrder>> response = call.execute();
+
+            if (! response.isSuccessful()) {
+                return null;
+            }
+            Log.i("PROJECTSELECTION", response.body().toString());
+            Log.i("PROJECTSELECTION", user.getApiToken());
+            return response.body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private void setupDrawer() {
@@ -204,6 +248,22 @@ public class ProjectSelectionActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             }
+        }
+    }
+
+    public class GetJobOrdersTask extends AsyncTask<String, Void, List<JobOrder>> {
+        @Override
+        protected List<JobOrder> doInBackground(String... params) {
+            return getJobOrders();
+        }
+
+        @Override
+        protected void onPostExecute(List<JobOrder> jo) {
+            super.onPostExecute(jo);
+
+            projects = jo;
+            mRecyclerViewEvents.setAdapter(new ProjectAdapter(ProjectSelectionActivity.this, projects));
+            mRecyclerViewEvents.invalidate();
         }
     }
 }

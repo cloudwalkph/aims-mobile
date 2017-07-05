@@ -4,6 +4,7 @@ import com.cloudwalkdigital.aims.LoginActivity;
 import com.cloudwalkdigital.aims.dagger.modules.AppModule;
 import com.cloudwalkdigital.aims.dagger.modules.NetModule;
 import com.cloudwalkdigital.aims.joborder.JobOrderDiscussionsFragment;
+import com.cloudwalkdigital.aims.projectselection.ProjectSelectionActivity;
 
 import javax.inject.Singleton;
 
@@ -17,5 +18,6 @@ import dagger.Component;
 @Component(modules = {AppModule.class, NetModule.class})
 public interface NetComponent {
     void inject(LoginActivity activity);
+    void inject(ProjectSelectionActivity activity);
     void inject(JobOrderDiscussionsFragment fragment);
 }
