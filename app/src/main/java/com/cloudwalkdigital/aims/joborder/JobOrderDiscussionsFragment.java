@@ -23,6 +23,7 @@ import com.github.bassaer.chatmessageview.models.Message;
 import com.github.bassaer.chatmessageview.models.User;
 import com.github.bassaer.chatmessageview.utils.ChatBot;
 import com.github.bassaer.chatmessageview.views.ChatView;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.pusher.client.Pusher;
 import com.pusher.client.PusherOptions;
@@ -32,7 +33,13 @@ import com.pusher.client.channel.SubscriptionEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import javax.inject.Inject;
@@ -43,10 +50,10 @@ import javax.inject.Inject;
  * create an instance of this fragment.
  */
 public class JobOrderDiscussionsFragment extends Fragment {
-    @Inject
-    Gson gson;
+    @Inject Gson gson;
 
     public String TAG = "JOBORDERDISCUSSION";
+    public List<Discussion> discussions;
 
     private ChatView mChatView;
 
@@ -60,11 +67,14 @@ public class JobOrderDiscussionsFragment extends Fragment {
      *
      * @return A new instance of fragment JobOrderDiscussionsFragment.
      */
-    public static JobOrderDiscussionsFragment newInstance() {
+    public static JobOrderDiscussionsFragment newInstance(List<Discussion> discussions) {
+        Gson converter = new Gson();
+        String messages = converter.toJson(discussions);
+
         JobOrderDiscussionsFragment fragment = new JobOrderDiscussionsFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
+        args.putString("discussions", messages);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -74,6 +84,12 @@ public class JobOrderDiscussionsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         ((App) getActivity().getApplication()).getNetComponent().inject(this);
+
+        if (getArguments() != null) {
+            String messages = getArguments().getString("discussions");
+            Type type = new TypeToken<List<Discussion>>(){}.getType();
+            discussions = gson.fromJson(messages, type);
+        }
 
         connectToSocketServer();
     }
@@ -130,26 +146,11 @@ public class JobOrderDiscussionsFragment extends Fragment {
                 mChatView.send(message);
                 //Reset edit text
                 mChatView.setInputText("");
-
-                //Receive message
-//                final Message receivedMessage = new Message.Builder()
-//                        .setUser(you)
-//                        .setRightMessage(false)
-//                        .setMessageText(ChatBot.talk(me.getName(), message.getMessageText()))
-//                        .build();
-
-                // This is a demo bot
-                // Return within 3 seconds
-//                int sendDelay = (new Random().nextInt(4) + 1) * 1000;
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mChatView.receive(receivedMessage);
-//                    }
-//                }, sendDelay);
             }
 
         });
+
+        initPreviousMessages();
 
         return view;
     }
@@ -171,6 +172,41 @@ public class JobOrderDiscussionsFragment extends Fragment {
         });
 
         pusher.connect();
+    }
+
+    private void initPreviousMessages() {
+        if (discussions.size() <= 0) {
+            return;
+        }
+
+        for (Discussion discussion : discussions) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD HH:mm:ss", Locale.ENGLISH);
+            Calendar createdAt = Calendar.getInstance();
+
+            try {
+                createdAt.setTime(sdf.parse(discussion.getCreatedAt()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            //Receive message
+            Bitmap yourIcon = getOptimizedBitmap(R.drawable.face_1);
+            com.cloudwalkdigital.aims.data.model.User user = discussion.getUser();
+            User sender = new User(user.getId(), user.getProfile().getName(), yourIcon);
+            final Message receivedMessage = new Message.Builder()
+                    .setUser(sender)
+                    .setRightMessage(false)
+                    .setCreatedAt(createdAt)
+                    .setMessageText(discussion.getMessage())
+                    .build();
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mChatView.receive(receivedMessage);
+                }
+            });
+        }
     }
 
     private void newMessage(String json) {

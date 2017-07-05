@@ -11,25 +11,42 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
+import com.cloudwalkdigital.aims.App;
 import com.cloudwalkdigital.aims.R;
+import com.cloudwalkdigital.aims.data.model.JobOrder;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class JobOrderActivity extends AppCompatActivity {
+    @Inject Gson gson;
 
     public List<Fragment> fragments;
+    private JobOrder jobOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_order);
 
+        ((App) getApplication()).getNetComponent().inject(this);
+
+        // Get attached job order from the intent
+        String jo = getIntent().getStringExtra("jobOrder");
+        jobOrder = gson.fromJson(jo, JobOrder.class);
+
+        if (jobOrder == null) {
+            finish();
+        }
+
         setupToolbar();
 
         fragments = new ArrayList<Fragment>();
         fragments.add(JobOrderFragment.newInstance());
-        fragments.add(JobOrderDiscussionsFragment.newInstance());
+        fragments.add(JobOrderDiscussionsFragment.newInstance(jobOrder.getDiscussions()));
         fragments.add(JobOrderValidateFragment.newInstance());
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
