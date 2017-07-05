@@ -17,7 +17,7 @@ import io.realm.Realm;
 
 public class App extends Application {
     private NetComponent mNetComponent;
-    private String mAPIUrl = "http://192.168.254.101:8000/api/";
+    private String mAPIUrl = "http://192.168.1.87:8000/api/";
 
     @Override
     public void onCreate() {

@@ -197,7 +197,7 @@ public class JobOrderDiscussionsFragment extends Fragment {
         Pusher pusher = new Pusher("dbbbc3a5c9b47ac1b3bd", options);
         Channel pChannel = pusher.subscribe(channel);
 
-        pChannel.bind("new.message", new SubscriptionEventListener() {
+        pChannel.bind("App\\Events\\NewDiscussion", new SubscriptionEventListener() {
             @Override
             public void onEvent(String channelName, String eventName, final String data) {
                 System.out.println(data);
@@ -250,22 +250,26 @@ public class JobOrderDiscussionsFragment extends Fragment {
 
     private void newMessage(Discussion discussion) {
         //Receive message
-        Bitmap yourIcon = getOptimizedBitmap(R.drawable.face_1);
-        com.cloudwalkdigital.aims.data.model.User user = discussion.getUser();
-        User sender = new User(user.getId(), user.getProfile().getName(), yourIcon);
-        final Message receivedMessage = new Message.Builder()
-                .setUser(sender)
-                .setRightMessage(false)
-                .setMessageText(discussion.getMessage())
-                .build();
+        try {
+            Bitmap yourIcon = getOptimizedBitmap(R.drawable.face_1);
+            com.cloudwalkdigital.aims.data.model.User user = discussion.getUser();
+            User sender = new User(user.getId(), user.getProfile().getName(), yourIcon);
+            final Message receivedMessage = new Message.Builder()
+                    .setUser(sender)
+                    .setRightMessage(false)
+                    .setMessageText(discussion.getMessage())
+                    .build();
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                playNotification();
-                mChatView.receive(receivedMessage);
-            }
-        });
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    playNotification();
+                    mChatView.receive(receivedMessage);
+                }
+            });
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
     }
 
     private static int calculateInSampleSize(BitmapFactory.Options options,
