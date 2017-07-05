@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -50,6 +51,7 @@ public class ProjectSelectionActivity extends AppCompatActivity {
     @Inject Gson gson;
 
     @BindView(R.id.rvProjects) RecyclerView mRecyclerViewEvents;
+    @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeRefreshLayout;
 
     private List<JobOrder> projects;
     private DrawerLayout mDrawerLayout;
@@ -89,6 +91,18 @@ public class ProjectSelectionActivity extends AppCompatActivity {
                 layoutManager.getOrientation());
 
         mRecyclerViewEvents.addItemDecoration(dividerItemDecoration);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                GetJobOrdersTask getJobOrdersTask = new GetJobOrdersTask();
+                getJobOrdersTask.execute();
+            }
+        });
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
     }
 
     private List<JobOrder> getJobOrders() {
@@ -205,7 +219,7 @@ public class ProjectSelectionActivity extends AppCompatActivity {
             textView.setText(project.getProjectName());
 
             TextView deadline = holder.deadlineTextView;
-            deadline.setText(project.getStartDate());
+            deadline.setText(project.getStartDate() == null || project.getStartDate().isEmpty() ? "No Schedule Set" : project.getStartDate());
 
             TextView jobOrderNo = holder.joTextView;
             jobOrderNo.setText(project.getJobOrderNo());
@@ -270,6 +284,8 @@ public class ProjectSelectionActivity extends AppCompatActivity {
             projects = jo;
             mRecyclerViewEvents.setAdapter(new ProjectAdapter(ProjectSelectionActivity.this, projects));
             mRecyclerViewEvents.invalidate();
+
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 }
