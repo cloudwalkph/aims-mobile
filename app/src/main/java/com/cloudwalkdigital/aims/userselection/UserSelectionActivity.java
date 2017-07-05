@@ -191,6 +191,10 @@ public class UserSelectionActivity extends AppCompatActivity {
 //                    Toast.makeText(getContext(), user.getDepartment(), Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(UserSelectionActivity.this, QuestionActivity.class);
+                    intent.putExtra("rateeId", user.getId());
+                    intent.putExtra("jobOrderId", jobOrderId);
+                    intent.putExtra("validateType", validateType);
+
                     startActivity(intent);
                 }
             }

@@ -7,6 +7,7 @@ import com.cloudwalkdigital.aims.joborder.JobOrderActivity;
 import com.cloudwalkdigital.aims.joborder.JobOrderDiscussionsFragment;
 import com.cloudwalkdigital.aims.joborder.JobOrderValidateFragment;
 import com.cloudwalkdigital.aims.projectselection.ProjectSelectionActivity;
+import com.cloudwalkdigital.aims.questions.QuestionActivity;
 import com.cloudwalkdigital.aims.userselection.UserSelectionActivity;
 
 import javax.inject.Singleton;
@@ -24,6 +25,7 @@ public interface NetComponent {
     void inject(ProjectSelectionActivity activity);
     void inject(JobOrderActivity activity);
     void inject(UserSelectionActivity activity);
+    void inject(QuestionActivity activity);
     void inject(JobOrderDiscussionsFragment fragment);
     void inject(JobOrderValidateFragment fragment);
 }

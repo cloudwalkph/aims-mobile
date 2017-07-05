@@ -1,6 +1,7 @@
 package com.cloudwalkdigital.aims.data;
 
 import com.cloudwalkdigital.aims.data.model.JobOrder;
+import com.cloudwalkdigital.aims.data.model.Question;
 import com.cloudwalkdigital.aims.data.model.User;
 
 import java.util.List;
@@ -31,4 +32,9 @@ public interface APIService {
     Call<List<User>> getRatees(@Path("jobOrderId") Integer jobOrderId,
                                @Path("validateType") String validateType,
                                @Query("api_token") String apiToken);
+
+    @GET("v1/validate/questions/{rateeId}/{jobOrderId}/{validateType}")
+    Call<List<Question>> getQuestions(@Path("rateeId") Integer rateeId, @Path("jobOrderId") Integer jobOrderId,
+                                      @Path("validateType") String validateType,
+                                      @Query("api_token") String apiToken);
 }
