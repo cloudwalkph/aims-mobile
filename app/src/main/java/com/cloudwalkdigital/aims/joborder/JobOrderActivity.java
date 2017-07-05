@@ -46,7 +46,7 @@ public class JobOrderActivity extends AppCompatActivity {
 
         fragments = new ArrayList<Fragment>();
         fragments.add(JobOrderFragment.newInstance());
-        fragments.add(JobOrderDiscussionsFragment.newInstance(jobOrder.getDiscussions()));
+        fragments.add(JobOrderDiscussionsFragment.newInstance(jobOrder.getDiscussions(), jobOrder.getId()));
         fragments.add(JobOrderValidateFragment.newInstance(jobOrder));
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items

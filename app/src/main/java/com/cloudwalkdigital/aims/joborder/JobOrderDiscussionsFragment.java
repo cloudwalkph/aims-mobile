@@ -1,6 +1,7 @@
 package com.cloudwalkdigital.aims.joborder;
 
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -18,7 +19,10 @@ import android.view.ViewGroup;
 
 import com.cloudwalkdigital.aims.App;
 import com.cloudwalkdigital.aims.R;
+import com.cloudwalkdigital.aims.data.APIService;
 import com.cloudwalkdigital.aims.data.model.Discussion;
+import com.cloudwalkdigital.aims.userselection.UserSelectionActivity;
+import com.cloudwalkdigital.aims.utils.SessionManager;
 import com.github.bassaer.chatmessageview.models.Message;
 import com.github.bassaer.chatmessageview.models.User;
 import com.github.bassaer.chatmessageview.utils.ChatBot;
@@ -44,6 +48,11 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link JobOrderDiscussionsFragment#newInstance} factory method to
@@ -51,11 +60,16 @@ import javax.inject.Inject;
  */
 public class JobOrderDiscussionsFragment extends Fragment {
     @Inject Gson gson;
+    @Inject SharedPreferences sharedPreferences;
+    @Inject SessionManager sessionManager;
+    @Inject Retrofit retrofit;
 
     public String TAG = "JOBORDERDISCUSSION";
     public List<Discussion> discussions;
+    public Integer jobOrderId;
 
     private ChatView mChatView;
+    public com.cloudwalkdigital.aims.data.model.User currentUser;
 
     public JobOrderDiscussionsFragment() {
         // Required empty public constructor
@@ -67,13 +81,15 @@ public class JobOrderDiscussionsFragment extends Fragment {
      *
      * @return A new instance of fragment JobOrderDiscussionsFragment.
      */
-    public static JobOrderDiscussionsFragment newInstance(List<Discussion> discussions) {
+    public static JobOrderDiscussionsFragment newInstance(List<Discussion> discussions, Integer jobOrderId) {
         Gson converter = new Gson();
         String messages = converter.toJson(discussions);
 
         JobOrderDiscussionsFragment fragment = new JobOrderDiscussionsFragment();
+
         Bundle args = new Bundle();
         args.putString("discussions", messages);
+        args.putInt("jobOrderId", jobOrderId);
 
         fragment.setArguments(args);
         return fragment;
@@ -89,7 +105,11 @@ public class JobOrderDiscussionsFragment extends Fragment {
             String messages = getArguments().getString("discussions");
             Type type = new TypeToken<List<Discussion>>(){}.getType();
             discussions = gson.fromJson(messages, type);
+
+            jobOrderId = getArguments().getInt("jobOrderId");
         }
+
+        currentUser = sessionManager.getUserInformation();
 
         connectToSocketServer();
     }
@@ -107,12 +127,7 @@ public class JobOrderDiscussionsFragment extends Fragment {
         //User name
         String myName = "Michael";
 
-//        int yourId = 1;
-//        Bitmap yourIcon = BitmapFactory.decodeResource(getResources(), R.drawable.face_1);
-//        String yourName = "Emily";
-
-        final User me = new User(myId, myName, myIcon);
-//        final User you = new User(yourId, yourName, yourIcon);
+        final User me = new User(currentUser.getId(), currentUser.getProfile().getName(), myIcon);
 
         mChatView = (ChatView) view.findViewById(R.id.chat_view);
 
@@ -146,6 +161,8 @@ public class JobOrderDiscussionsFragment extends Fragment {
                 mChatView.send(message);
                 //Reset edit text
                 mChatView.setInputText("");
+
+                sendMessageRemote(message.getMessageText());
             }
 
         });
@@ -155,8 +172,25 @@ public class JobOrderDiscussionsFragment extends Fragment {
         return view;
     }
 
+    private void sendMessageRemote(String message) {
+        APIService service = retrofit.create(APIService.class);
+
+        Call<Discussion> call = service.sendMessage(message, currentUser.getId(), jobOrderId,currentUser.getApiToken());
+        call.enqueue(new Callback<Discussion>() {
+            @Override
+            public void onResponse(Call<Discussion> call, Response<Discussion> response) {
+                Log.i(TAG, response.toString());
+            }
+
+            @Override
+            public void onFailure(Call<Discussion> call, Throwable t) {
+
+            }
+        });
+    }
+
     private void connectToSocketServer() {
-        String channel = "jo.1";
+        String channel = "jo."+jobOrderId;
 
         PusherOptions options = new PusherOptions();
         options.setCluster("ap1");
@@ -167,7 +201,11 @@ public class JobOrderDiscussionsFragment extends Fragment {
             @Override
             public void onEvent(String channelName, String eventName, final String data) {
                 System.out.println(data);
-                newMessage(data);
+                Discussion discussion = gson.fromJson(data, Discussion.class);
+
+                if (discussion.getUser().getId() != currentUser.getId()) {
+                    newMessage(discussion);
+                }
             }
         });
 
@@ -193,9 +231,10 @@ public class JobOrderDiscussionsFragment extends Fragment {
             Bitmap yourIcon = getOptimizedBitmap(R.drawable.face_1);
             com.cloudwalkdigital.aims.data.model.User user = discussion.getUser();
             User sender = new User(user.getId(), user.getProfile().getName(), yourIcon);
+
             final Message receivedMessage = new Message.Builder()
                     .setUser(sender)
-                    .setRightMessage(false)
+                    .setRightMessage(currentUser.getId() == user.getId())
                     .setCreatedAt(createdAt)
                     .setMessageText(discussion.getMessage())
                     .build();
@@ -209,9 +248,7 @@ public class JobOrderDiscussionsFragment extends Fragment {
         }
     }
 
-    private void newMessage(String json) {
-        Discussion discussion = gson.fromJson(json, Discussion.class);
-
+    private void newMessage(Discussion discussion) {
         //Receive message
         Bitmap yourIcon = getOptimizedBitmap(R.drawable.face_1);
         com.cloudwalkdigital.aims.data.model.User user = discussion.getUser();
