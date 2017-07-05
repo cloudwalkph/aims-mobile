@@ -47,7 +47,7 @@ public class JobOrderActivity extends AppCompatActivity {
         fragments = new ArrayList<Fragment>();
         fragments.add(JobOrderFragment.newInstance());
         fragments.add(JobOrderDiscussionsFragment.newInstance(jobOrder.getDiscussions()));
-        fragments.add(JobOrderValidateFragment.newInstance());
+        fragments.add(JobOrderValidateFragment.newInstance(jobOrder));
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -65,9 +65,16 @@ public class JobOrderActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         ActionBar ab = getSupportActionBar();
-        ab.setTitle("Project 1");
-        ab.setSubtitle("AGASDA55");
+        ab.setTitle(jobOrder.getProjectName());
+        ab.setSubtitle(jobOrder.getJobOrderNo());
         ab.setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        jobOrder = null;
     }
 
     public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {

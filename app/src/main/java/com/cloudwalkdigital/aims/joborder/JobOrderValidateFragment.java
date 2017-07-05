@@ -14,8 +14,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.cloudwalkdigital.aims.App;
 import com.cloudwalkdigital.aims.R;
+import com.cloudwalkdigital.aims.data.model.JobOrder;
 import com.cloudwalkdigital.aims.userselection.UserSelectionActivity;
+import com.google.gson.Gson;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +32,7 @@ import butterknife.OnClick;
  * create an instance of this fragment.
  */
 public class JobOrderValidateFragment extends Fragment {
+    @Inject Gson gson;
 
     @BindView(R.id.ivPreEvent) ImageView ivPreEvent;
     @BindView(R.id.ivEventProper) ImageView ivEventProper;
@@ -41,6 +47,8 @@ public class JobOrderValidateFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private JobOrder jobOrder;
+
 
     public JobOrderValidateFragment() {
         // Required empty public constructor
@@ -53,11 +61,15 @@ public class JobOrderValidateFragment extends Fragment {
      * @return A new instance of fragment JobOrderValidateFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static JobOrderValidateFragment newInstance() {
+    public static JobOrderValidateFragment newInstance(JobOrder jobOrder) {
+        Gson converter = new Gson();
+        String jo = converter.toJson(jobOrder);
+
         JobOrderValidateFragment fragment = new JobOrderValidateFragment();
         Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
+
+        args.putString("jobOrder", jo);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,9 +77,12 @@ public class JobOrderValidateFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ((App) getActivity().getApplication()).getNetComponent().inject(this);
+
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            String jo = getArguments().getString("jobOrder");
+            jobOrder = gson.fromJson(jo, JobOrder.class);
         }
     }
 
@@ -80,25 +95,59 @@ public class JobOrderValidateFragment extends Fragment {
         // Inflate the layout for this fragment
         ButterKnife.bind(this, view);
 
+        if (jobOrder.getPreEvent().equalsIgnoreCase("inactive")) {
+            setLocked(ivPreEvent);
+        }
+
+        if (jobOrder.getEventProper().equalsIgnoreCase("inactive")) {
+            setLocked(ivEventProper);
+        }
+
+        if (jobOrder.getPostEvent().equalsIgnoreCase("inactive")) {
+            setLocked(ivPostEvent);
+        }
+
         return view;
     }
 
     @OnClick(R.id.ivPreEvent)
     public void preEvent() {
-        Intent intent = new Intent(getContext(), UserSelectionActivity.class);
-        startActivity(intent);
+        moveToSelectRatee("pre");
     }
 
     @OnClick(R.id.ivEventProper)
     public void eventProper() {
-
-        Intent intent = new Intent(getContext(), UserSelectionActivity.class);
-        startActivity(intent);
+        moveToSelectRatee("event-proper");
     }
 
     @OnClick(R.id.ivPostEvent)
     public void postEvent() {
+        moveToSelectRatee("post");
+    }
 
+    private void moveToSelectRatee(String validateType) {
+        Intent intent = new Intent(getContext(), UserSelectionActivity.class);
+        intent.putExtra("validateType", validateType);
+        intent.putExtra("jobOrderId", jobOrder.getId());
+
+        startActivity(intent);
+    }
+
+    public static void setLocked(ImageView v)
+    {
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);  //0 means grayscale
+        ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
+        v.setColorFilter(cf);
+        v.setImageAlpha(128);
+        v.setEnabled(false);
+    }
+
+    // reset grayscale to colored
+    public static void setUnlocked(ImageView v)
+    {
+        v.setColorFilter(null);
+        v.setImageAlpha(255);
     }
 
 }

@@ -2,6 +2,7 @@ package com.cloudwalkdigital.aims.userselection;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,47 +16,68 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cloudwalkdigital.aims.App;
 import com.cloudwalkdigital.aims.R;
+import com.cloudwalkdigital.aims.data.APIService;
 import com.cloudwalkdigital.aims.data.model.User;
 import com.cloudwalkdigital.aims.questions.QuestionActivity;
+import com.cloudwalkdigital.aims.utils.SessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class UserSelectionActivity extends AppCompatActivity {
+    @Inject Retrofit retrofit;
+    @Inject SharedPreferences sharedPreferences;
+    @Inject SessionManager sessionManager;
 
     @BindView(R.id.rvUsers) RecyclerView mRecyclerViewUsers;
     private List<User> users;
+    public String validateType;
+    public Integer jobOrderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_selection);
+
+        ((App) getApplication()).getNetComponent().inject(this);
         ButterKnife.bind(this);
+
+        validateType = getIntent().getStringExtra("validateType");
+        jobOrderId = getIntent().getIntExtra("jobOrderId", 0);
+
+        getRatees();
 
         setupToolbar();
 
-//        mRecyclerViewUsers.setHasFixedSize(true);
-//
-//        users = new ArrayList<User>();
+        mRecyclerViewUsers.setHasFixedSize(true);
+
+        users = new ArrayList<User>();
 //        users.add(new User("Jane", "Doe", "Inventory")); //test data
 //        users.add(new User("John", "Doe", "Creatives")); //test data
 //
-//        // Create adapter passing in the sample user data
-//        UserSelectionActivity.UserAdapter adapter = new UserSelectionActivity.UserAdapter(UserSelectionActivity.this, users);
-//        // Attach the adapter to the recyclerview to populate items
-//        mRecyclerViewUsers.setAdapter(adapter);
-//        // Set layout manager to position the items
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(UserSelectionActivity.this);
-//        mRecyclerViewUsers.setLayoutManager(layoutManager);
-//
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerViewUsers.getContext(),
-//                layoutManager.getOrientation());
-//
-//        mRecyclerViewUsers.addItemDecoration(dividerItemDecoration);
+        // Create adapter passing in the sample user data
+        UserSelectionActivity.UserAdapter adapter = new UserSelectionActivity.UserAdapter(UserSelectionActivity.this, users);
+        // Attach the adapter to the recyclerview to populate items
+        mRecyclerViewUsers.setAdapter(adapter);
+        // Set layout manager to position the items
+        LinearLayoutManager layoutManager = new LinearLayoutManager(UserSelectionActivity.this);
+        mRecyclerViewUsers.setLayoutManager(layoutManager);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerViewUsers.getContext(),
+                layoutManager.getOrientation());
+
+        mRecyclerViewUsers.addItemDecoration(dividerItemDecoration);
     }
 
     private void setupToolbar() {
@@ -65,6 +87,28 @@ public class UserSelectionActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setTitle("Select User");
         ab.setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void getRatees() {
+        APIService service = retrofit.create(APIService.class);
+        User user = sessionManager.getUserInformation();
+
+        Call<List<User>> call = service.getRatees(jobOrderId, validateType, user.getApiToken());
+        call.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (response.isSuccessful()) {
+                    users = response.body();
+                    mRecyclerViewUsers.setAdapter(new UserAdapter(getApplicationContext(), users));
+                    mRecyclerViewUsers.invalidate();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+
+            }
+        });
     }
 
     /**
