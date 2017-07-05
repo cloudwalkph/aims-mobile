@@ -1,32 +1,38 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.cloudwalkdigital.aims.questions.QuestionFragment">
+    android:orientation="vertical" >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/tvFragmentTitle"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Question #1"
-        android:textAlignment="center"
-        android:textSize="14dp"
-        android:textStyle="bold" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="50dp"
+        android:gravity="center_horizontal">
 
-    <TextView
-        android:id="@+id/tvQuestions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textSize="12dp"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/question_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="1. Updated all concerned departments on negotiation's status of the venues and/or other channels:"
+            android:textSize="16dp"
+            android:typeface="normal" />
+
+        <LinearLayout
+            android:id="@+id/linear_layout_answer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            android:gravity="left"
+            android:layout_marginLeft="20dp">
+
+        </LinearLayout>
 
 
-</LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

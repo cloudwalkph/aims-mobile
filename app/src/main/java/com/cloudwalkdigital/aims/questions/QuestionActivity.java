@@ -143,7 +143,7 @@ public class QuestionActivity extends AppCompatActivity {
 
             Question question = questions.get(pos);
 
-            return QuestionFragment.newInstance(question.getQuestion());
+            return QuestionFragment.newInstance(question);
         }
 
         @Override

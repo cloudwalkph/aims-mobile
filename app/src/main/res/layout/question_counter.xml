@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="5dp"
                 android:text="Question"
-                android:textColor="@color/grey_400"
+                android:textColor="@color/black"
                 android:textSize="14dp" />
 
             <TextView
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="5dp"
                 android:text="1"
-                android:textColor="@color/grey_400"
+                android:textColor="@color/black"
                 android:textSize="14dp" />
 
             <TextView
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="5dp"
                 android:text="of"
-                android:textColor="@color/grey_400"
+                android:textColor="@color/black"
                 android:textSize="14dp" />
 
             <TextView
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="5dp"
                 android:text="100"
-                android:textColor="@color/grey_400"
+                android:textColor="@color/black"
                 android:textSize="14dp" />
 
         </LinearLayout>
