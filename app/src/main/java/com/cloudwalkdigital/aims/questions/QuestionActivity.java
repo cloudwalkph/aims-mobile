@@ -1,5 +1,6 @@
 package com.cloudwalkdigital.aims.questions;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -159,6 +160,9 @@ public class QuestionActivity extends AppCompatActivity {
         if(page < totalPage){
             mMinimumQuestion.setText(String.valueOf(page+1));
             mPager.setCurrentItem(page, true);
+        }else if(page == totalPage){
+            startActivity(new Intent(getApplicationContext(), QuestionCompleteActivity.class));
+            finish();
         }
     }
 
