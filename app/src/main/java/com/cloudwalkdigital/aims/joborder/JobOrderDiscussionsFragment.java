@@ -21,6 +21,7 @@ import com.cloudwalkdigital.aims.App;
 import com.cloudwalkdigital.aims.R;
 import com.cloudwalkdigital.aims.data.APIService;
 import com.cloudwalkdigital.aims.data.model.Discussion;
+import com.cloudwalkdigital.aims.data.model.JobOrder;
 import com.cloudwalkdigital.aims.userselection.UserSelectionActivity;
 import com.cloudwalkdigital.aims.utils.SessionManager;
 import com.github.bassaer.chatmessageview.models.Message;
@@ -48,6 +49,8 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
+import io.realm.Realm;
+import io.realm.RealmQuery;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,10 +62,11 @@ import retrofit2.Retrofit;
  * create an instance of this fragment.
  */
 public class JobOrderDiscussionsFragment extends Fragment {
-    @Inject Gson gson;
     @Inject SharedPreferences sharedPreferences;
     @Inject SessionManager sessionManager;
     @Inject Retrofit retrofit;
+    @Inject Realm realm;
+    @Inject Gson gson;
 
     public String TAG = "JOBORDERDISCUSSION";
     public List<Discussion> discussions;
@@ -81,14 +85,10 @@ public class JobOrderDiscussionsFragment extends Fragment {
      *
      * @return A new instance of fragment JobOrderDiscussionsFragment.
      */
-    public static JobOrderDiscussionsFragment newInstance(List<Discussion> discussions, Integer jobOrderId) {
-        Gson converter = new Gson();
-        String messages = converter.toJson(discussions);
-
+    public static JobOrderDiscussionsFragment newInstance(Integer jobOrderId) {
         JobOrderDiscussionsFragment fragment = new JobOrderDiscussionsFragment();
 
         Bundle args = new Bundle();
-        args.putString("discussions", messages);
         args.putInt("jobOrderId", jobOrderId);
 
         fragment.setArguments(args);
@@ -102,16 +102,27 @@ public class JobOrderDiscussionsFragment extends Fragment {
         ((App) getActivity().getApplication()).getNetComponent().inject(this);
 
         if (getArguments() != null) {
-            String messages = getArguments().getString("discussions");
-            Type type = new TypeToken<List<Discussion>>(){}.getType();
-            discussions = gson.fromJson(messages, type);
+//            String messages = getArguments().getString("discussions");
+//            Type type = new TypeToken<List<Discussion>>(){}.getType();
+//            discussions = gson.fromJson(messages, type);
 
             jobOrderId = getArguments().getInt("jobOrderId");
+
+            getDiscussions();
         }
 
         currentUser = sessionManager.getUserInformation();
 
         connectToSocketServer();
+    }
+
+    private void getDiscussions() {
+        realm.beginTransaction();
+            RealmQuery<JobOrder> query = realm.where(JobOrder.class);
+            query.equalTo("id", jobOrderId);
+            JobOrder jo = query.findFirst();
+            discussions = jo.getDiscussions();
+        realm.commitTransaction();
     }
 
     @Override

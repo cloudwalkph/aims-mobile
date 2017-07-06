@@ -10,20 +10,24 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.cloudwalkdigital.aims.App;
 import com.cloudwalkdigital.aims.R;
 import com.cloudwalkdigital.aims.data.model.JobOrder;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+
 public class JobOrderActivity extends AppCompatActivity {
-    @Inject Gson gson;
+    @Inject Realm realm;
 
     public List<Fragment> fragments;
     private JobOrder jobOrder;
@@ -36,8 +40,16 @@ public class JobOrderActivity extends AppCompatActivity {
         ((App) getApplication()).getNetComponent().inject(this);
 
         // Get attached job order from the intent
-        String jo = getIntent().getStringExtra("jobOrder");
-        jobOrder = gson.fromJson(jo, JobOrder.class);
+        int jo = getIntent().getIntExtra("jobOrder", 0);
+        if (jo == 0) {
+            finish();
+        }
+
+        realm.beginTransaction();
+            RealmQuery<JobOrder> joQuery = realm.where(JobOrder.class);
+            joQuery.equalTo("id", jo);
+            jobOrder = joQuery.findFirst();
+        realm.commitTransaction();
 
         if (jobOrder == null) {
             finish();
@@ -47,8 +59,8 @@ public class JobOrderActivity extends AppCompatActivity {
 
         fragments = new ArrayList<Fragment>();
         fragments.add(JobOrderFragment.newInstance());
-        fragments.add(JobOrderDiscussionsFragment.newInstance(jobOrder.getDiscussions(), jobOrder.getId()));
-        fragments.add(JobOrderValidateFragment.newInstance(jobOrder));
+        fragments.add(JobOrderDiscussionsFragment.newInstance(jo));
+        fragments.add(JobOrderValidateFragment.newInstance(jo));
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);

@@ -25,6 +25,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
+import io.realm.RealmQuery;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +35,7 @@ import butterknife.OnClick;
  */
 public class JobOrderValidateFragment extends Fragment {
     @Inject Gson gson;
+    @Inject Realm realm;
 
     @BindView(R.id.ivPreEvent) ImageView ivPreEvent;
     @BindView(R.id.ivEventProper) ImageView ivEventProper;
@@ -61,14 +64,10 @@ public class JobOrderValidateFragment extends Fragment {
      * @return A new instance of fragment JobOrderValidateFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static JobOrderValidateFragment newInstance(JobOrder jobOrder) {
-        Gson converter = new Gson();
-        String jo = converter.toJson(jobOrder);
-
+    public static JobOrderValidateFragment newInstance(Integer jobOrder) {
         JobOrderValidateFragment fragment = new JobOrderValidateFragment();
         Bundle args = new Bundle();
-
-        args.putString("jobOrder", jo);
+        args.putInt("jobOrder", jobOrder);
 
         fragment.setArguments(args);
         return fragment;
@@ -81,9 +80,19 @@ public class JobOrderValidateFragment extends Fragment {
         ((App) getActivity().getApplication()).getNetComponent().inject(this);
 
         if (getArguments() != null) {
-            String jo = getArguments().getString("jobOrder");
-            jobOrder = gson.fromJson(jo, JobOrder.class);
+            Integer jo = getArguments().getInt("jobOrder", 0);
+            jobOrder = getJobOrder(jo);
         }
+    }
+
+    private JobOrder getJobOrder(Integer joId) {
+        realm.beginTransaction();
+            RealmQuery<JobOrder> query = realm.where(JobOrder.class);
+            query.equalTo("id", joId);
+            JobOrder jo = query.findFirst();
+        realm.commitTransaction();
+
+        return jo;
     }
 
     @Override

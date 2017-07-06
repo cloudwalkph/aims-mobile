@@ -30,7 +30,6 @@ import com.cloudwalkdigital.aims.data.model.JobOrder;
 import com.cloudwalkdigital.aims.data.model.User;
 import com.cloudwalkdigital.aims.joborder.JobOrderActivity;
 import com.cloudwalkdigital.aims.utils.SessionManager;
-import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,7 +50,6 @@ public class ProjectSelectionActivity extends AppCompatActivity {
     @Inject Retrofit retrofit;
     @Inject SharedPreferences sharedPreferences;
     @Inject SessionManager sessionManager;
-    @Inject Gson gson;
     @Inject Realm realm;
 
     @BindView(R.id.rvProjects) RecyclerView mRecyclerViewEvents;
@@ -273,8 +271,7 @@ public class ProjectSelectionActivity extends AppCompatActivity {
                     Toast.makeText(getContext(), project.getProjectName(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(ProjectSelectionActivity.this, JobOrderActivity.class);
 
-                    String jo = gson.toJson(project, JobOrder.class);
-                    intent.putExtra("jobOrder", jo);
+                    intent.putExtra("jobOrder", project.getId());
 
                     startActivity(intent);
                 }
