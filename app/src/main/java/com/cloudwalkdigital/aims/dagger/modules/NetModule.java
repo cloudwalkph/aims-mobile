@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.realm.Realm;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -75,5 +76,11 @@ public class NetModule {
                 .build();
 
         return retrofit;
+    }
+
+    @Provides
+    @Singleton
+    Realm provideRealm() {
+        return Realm.getDefaultInstance();
     }
 }

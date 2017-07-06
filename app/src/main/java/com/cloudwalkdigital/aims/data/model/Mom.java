@@ -2,11 +2,15 @@ package com.cloudwalkdigital.aims.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by alleoindong on 7/5/17.
  */
 
-public class Mom {
+public class Mom extends RealmObject {
+    @PrimaryKey
     private Integer id;
     private String agenda;
     @SerializedName("date_and_time")

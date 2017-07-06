@@ -1,10 +1,12 @@
 package com.cloudwalkdigital.aims.data.model;
 
+import io.realm.RealmObject;
+
 /**
  * Created by alleoindong on 7/5/17.
  */
 
-public class Venue {
+public class Venue extends RealmObject {
     private Integer id;
     private String category;
     private String subcategory;

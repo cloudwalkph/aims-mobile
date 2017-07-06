@@ -40,6 +40,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -49,6 +52,7 @@ public class ProjectSelectionActivity extends AppCompatActivity {
     @Inject SharedPreferences sharedPreferences;
     @Inject SessionManager sessionManager;
     @Inject Gson gson;
+    @Inject Realm realm;
 
     @BindView(R.id.rvProjects) RecyclerView mRecyclerViewEvents;
     @BindView(R.id.swipeContainer) SwipeRefreshLayout swipeRefreshLayout;
@@ -121,6 +125,7 @@ public class ProjectSelectionActivity extends AppCompatActivity {
             }
             Log.i("PROJECTSELECTION", response.body().toString());
             Log.i("PROJECTSELECTION", user.getApiToken());
+
             return response.body();
         } catch (IOException e) {
             e.printStackTrace();
@@ -229,6 +234,10 @@ public class ProjectSelectionActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
+            if (mProject == null) {
+                return 0;
+            }
+
             return mProject.size();
         }
 
@@ -283,7 +292,17 @@ public class ProjectSelectionActivity extends AppCompatActivity {
         protected void onPostExecute(List<JobOrder> jo) {
             super.onPostExecute(jo);
 
-            projects = jo;
+            realm.beginTransaction();
+                if (jo == null) {
+                    RealmQuery<JobOrder>  joQuery = realm.where(JobOrder.class);
+                    RealmResults<JobOrder> localJobOrders = joQuery.findAll();
+                    projects = localJobOrders;
+                } else {
+                    projects = realm.copyToRealmOrUpdate(jo);
+                }
+            realm.commitTransaction();
+
+//          projects = jo;
             mRecyclerViewEvents.setAdapter(new ProjectAdapter(ProjectSelectionActivity.this, projects));
             mRecyclerViewEvents.invalidate();
 

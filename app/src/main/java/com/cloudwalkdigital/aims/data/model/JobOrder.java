@@ -4,11 +4,16 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by alleoindong on 6/28/17.
  */
 
-public class JobOrder {
+public class JobOrder extends RealmObject {
+    @PrimaryKey
     private Integer id;
     @SerializedName("project_name")
     private String projectName;
@@ -28,9 +33,10 @@ public class JobOrder {
     private String postEvent;
     @SerializedName("event_proper")
     private String eventProper;
-    private List<Discussion> discussions;
-    private List<Mom> moms;
-    private List<Schedule> schedules;
+
+    private RealmList<Discussion> discussions;
+    private RealmList<Mom> moms;
+    private RealmList<Schedule> schedules;
 
     public JobOrder() {
     }
@@ -44,7 +50,7 @@ public class JobOrder {
     public JobOrder(Integer id, String projectName, String projectType, String deadline,
                     String jobOrderNo, String status, String startDate, String endDate,
                     String preEvent, String postEvent, String eventProper,
-                    List<Discussion> discussions, List<Mom> moms, List<Schedule> schedules) {
+                    RealmList<Discussion> discussions, RealmList<Mom> moms, RealmList<Schedule> schedules) {
         this.id = id;
         this.projectName = projectName;
         this.projectType = projectType;
@@ -103,15 +109,15 @@ public class JobOrder {
         return eventProper;
     }
 
-    public List<Discussion> getDiscussions() {
+    public RealmList<Discussion> getDiscussions() {
         return discussions;
     }
 
-    public List<Mom> getMoms() {
+    public RealmList<Mom> getMoms() {
         return moms;
     }
 
-    public List<Schedule> getSchedules() {
+    public RealmList<Schedule> getSchedules() {
         return schedules;
     }
 }
