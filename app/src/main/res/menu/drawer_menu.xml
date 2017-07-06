@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/menu_calendar"
+        android:icon="@drawable/events"
+        android:title="@string/menu_events" />
+
+    <item
         android:id="@+id/menu_logout"
         android:icon="@drawable/logout"
         android:title="@string/menu_logout" />

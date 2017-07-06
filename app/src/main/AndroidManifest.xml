@@ -24,7 +24,8 @@
         <activity android:name=".intro.IntroActivity" />
         <activity android:name=".userselection.UserSelectionActivity" />
         <activity android:name=".questions.QuestionActivity" />
-        <activity android:name=".questions.QuestionCompleteActivity"></activity>
+        <activity android:name=".questions.QuestionCompleteActivity" />
+        <activity android:name=".schedules.ScheduleActivity"></activity>
     </application>
 
 </manifest>

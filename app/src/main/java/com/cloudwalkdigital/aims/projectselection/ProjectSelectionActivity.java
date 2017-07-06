@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -29,6 +30,7 @@ import com.cloudwalkdigital.aims.data.APIService;
 import com.cloudwalkdigital.aims.data.model.JobOrder;
 import com.cloudwalkdigital.aims.data.model.User;
 import com.cloudwalkdigital.aims.joborder.JobOrderActivity;
+import com.cloudwalkdigital.aims.schedules.ScheduleActivity;
 import com.cloudwalkdigital.aims.utils.SessionManager;
 
 import java.io.IOException;
@@ -158,11 +160,16 @@ public class ProjectSelectionActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.menu_logout:
-                                // logout currently logged in user
-                                break;
+                                sessionManager.logout(getApplicationContext());
+                                return true;
+                            case R.id.menu_calendar:
+                                Intent intent = new Intent(getApplicationContext(), ScheduleActivity.class);
+                                startActivity(intent);
+                                return true;
                             default:
                                 break;
                         }
+
                         // Close the navigation drawer when an item is selected.
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
