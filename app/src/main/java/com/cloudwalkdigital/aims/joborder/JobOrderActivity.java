@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.cloudwalkdigital.aims.App;
 import com.cloudwalkdigital.aims.R;
@@ -75,6 +76,18 @@ public class JobOrderActivity extends AppCompatActivity {
         super.onDestroy();
 
         jobOrder = null;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // Open the navigation drawer when the home icon is selected from the toolbar.
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {

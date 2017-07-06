@@ -115,6 +115,8 @@ public class ProjectSelectionActivity extends AppCompatActivity {
             Response<List<JobOrder>> response = call.execute();
 
             if (! response.isSuccessful()) {
+                Log.e("PROJECTSELECTION", String.valueOf(response.code()));
+
                 return null;
             }
             Log.i("PROJECTSELECTION", response.body().toString());

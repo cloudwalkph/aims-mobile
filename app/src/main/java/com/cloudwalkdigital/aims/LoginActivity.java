@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -89,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
 
         try {
             Response<User> response = call.execute();
-
+            Log.i("LOGINACTIVITY", String.valueOf(response.code()));
             if (! response.isSuccessful()) {
                 return false;
             }
